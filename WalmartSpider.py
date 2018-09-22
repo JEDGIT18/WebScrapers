@@ -6,8 +6,8 @@ import linecache
 import os
 from bs4 import BeautifulSoup
 
-EbayFw = open('ebayitems.txt', 'w')  # makes or writes a file
-keyword = input("What do you want to search: ")
+
+walmartFw = open('walmartitems.txt', 'w')  # makes or writes a file
 while True:
     try:
         maxPages = int(input("How many pages of results do you want: "))
@@ -17,32 +17,32 @@ while True:
     except ValueError:
         print("these values must be Numbers!!")
 
-def tradeSpiderEbay(maxPages):
+def tradeSpiderWal(maxPages):
     page = 1
     while page <= maxPages:
         print("Page: ", page)
-        url = 'https://www.ebay.com/sch/i.html?_from=R40&_nkw=' + keyword + '&_sacat=0&LH_TitleDesc=0&LH_TitleDesc=0&_pgn=' + str(page)
+        url = 'https://www.walmart.com/browse/video-games/refurbished-preowned-video-games-consoles-accessories/2636_1056224?grid=false&page='+str(page)+'&sort=new#searchProductResult'
         srcCode = requests.get(url)
         plainTxt = srcCode.text
+        print("get")
         soup = BeautifulSoup(plainTxt,"html.parser")
-        for link in soup.findAll('a', {'class': 's-item__link'}):
-            href = link.get('href')
-            if grabEbayItemPrice(href) != None and grabEbayItemPrice(href) >= costMin and grabEbayItemPrice(href) <= costMax:
+        for link in soup.findAll('a', {'class': 'product-title-link line-clamp line-clamp-2'}):
+            href = 'https://www.walmart.com/'+link.get('href')
+            if grabWalItemPrice(href) != None and grabWalItemPrice(href) >= costMin and grabWalItemPrice(href) <= costMax:
 
-                print(grabEbayItemName(href) + " Cost is: " + str(grabEbayItemPrice(href)) + " Link: " + href)
-                EbayFw.write(grabEbayItemName(href) + " Cost is: " + color.BOLD + str(grabEbayItemPrice(href)) + color.END + " Link: " + href + '\n')  # writes to file
+                print(grabWalItemName(href) + " Cost is: " + str(grabWalItemPrice(href)) + " Link: " + href)
+                walmartFw.write(grabWalItemName(href) + " Cost is: " + color.BOLD + str(grabWalItemPrice(href)) + color.END + " Link: " + href + '\n')  # writes to file
 
 
         page += 1
     clearscreen()
     print('\n')
 
-
-def grabEbayItemName(itemUrl):
+def grabWalItemName(itemUrl):
     srcCode = requests.get(itemUrl)
     plainTxt = srcCode.text
     soup = BeautifulSoup(plainTxt, "html.parser" )
-    for itemName in soup.findAll('h1', {'id': 'itemTitle'}):
+    for itemName in soup.findAll('h1', {'class': 'prod-ProductTitle no-margin font-normal heading-a'}):
         return itemName.text.replace("Details about", "")
     # for link in soup.findAll('a', href = True):
     #     href = link.get('href')
@@ -50,12 +50,12 @@ def grabEbayItemName(itemUrl):
     #         print(href)
 
 
-def grabEbayItemPrice(itemUrl):
+def grabWalItemPrice(itemUrl):
     srcCode = requests.get(itemUrl)
     plainTxt = srcCode.text
     soup = BeautifulSoup(plainTxt, "html.parser" )
-    for itemName in soup.findAll('div', {'class': 'u-flL w29 vi-price '}):
-        price = itemName.text[5:]
+    for itemName in soup.findAll('span', {'class': 'price-group'}):
+        price = itemName.text[1:]
         price = re.sub('[^\d\.]', '', price)
         price = float(price)
         price = round(price, 2)
@@ -88,7 +88,7 @@ class color:
    UNDERLINE = '\033[4m'
    END = '\033[0m'
 
-tradeSpiderEbay(maxPages)
+tradeSpiderWal(maxPages)
 winsound.Beep(400, 500)
 
 while True:
@@ -99,48 +99,7 @@ while True:
     elif find == "y":
         typeS = input("search based on what keyword: ")
         key = input("Name: ")
-        with open('ebayitems.Txt', 'r') as myFile:
+        with open('walmartitems.Txt', 'r') as myFile:
             for line in myFile:
                 if key.lower() in line.lower():
                     print(line)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
