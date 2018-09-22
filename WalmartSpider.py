@@ -31,7 +31,7 @@ def tradeSpiderWal(maxPages):
             if grabWalItemPrice(href) != None and grabWalItemPrice(href) >= costMin and grabWalItemPrice(href) <= costMax:
 
                 print(grabWalItemName(href) + " Cost is: " + str(grabWalItemPrice(href)) + " Link: " + href)
-                walmartFw.write(grabWalItemName(href) + " Cost is: " + color.BOLD + str(grabWalItemPrice(href)) + color.END + " Link: " + href + '\n')  # writes to file
+                walmartFw.write(grabWalItemName(href) + " Cost is: " + str(grabWalItemPrice(href)) + " Link: " + href + '\n')  # writes to file
 
 
         page += 1
@@ -76,18 +76,6 @@ numlines is an optional argument used only as a fall-back.
   else:
     # Fallback for other operating systems.
     print('\n' * numlines)
-class color:
-   PURPLE = '\033[95m'
-   CYAN = '\033[96m'
-   DARKCYAN = '\033[36m'
-   BLUE = '\033[94m'
-   GREEN = '\033[92m'
-   YELLOW = '\033[93m'
-   RED = '\033[91m'
-   BOLD = '\033[1m'
-   UNDERLINE = '\033[4m'
-   END = '\033[0m'
-
 tradeSpiderWal(maxPages)
 winsound.Beep(400, 500)
 

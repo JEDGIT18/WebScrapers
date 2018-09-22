@@ -30,7 +30,7 @@ def tradeSpiderEbay(maxPages):
             if grabEbayItemPrice(href) != None and grabEbayItemPrice(href) >= costMin and grabEbayItemPrice(href) <= costMax:
 
                 print(grabEbayItemName(href) + " Cost is: " + str(grabEbayItemPrice(href)) + " Link: " + href)
-                EbayFw.write(grabEbayItemName(href) + " Cost is: " + color.BOLD + str(grabEbayItemPrice(href)) + color.END + " Link: " + href + '\n')  # writes to file
+                EbayFw.write(grabEbayItemName(href) + " Cost is: " + str(grabEbayItemPrice(href)) + " Link: " + href + '\n')  # writes to file
 
 
         page += 1
